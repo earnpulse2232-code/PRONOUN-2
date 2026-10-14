@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc">
+    <title>SSC English — Pronoun Lecture 2 (Quiz)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --bg-main: #f8fafc; --bg-card: #ffffff; --primary: #2563eb; --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff; --text-dark: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
+            --green: #10b981; --green-light: #ecfdf5; --red: #ef4444; --red-light: #fef2f2;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08);
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); color: var(--text-dark); min-height: 100dvh; font-size: 15px; line-height: 1.5; overflow-x: hidden; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+        .hidden { display: none !important; }
+        .start-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .start-card { width: 100%; max-width: 440px; background: var(--bg-card); border-radius: 24px; padding: 36px 28px; box-shadow: var(--shadow-lg); text-align: center; border: 1px solid var(--border-color); }
+        .brand-icon { width: 60px; height: 60px; background: var(--primary-light); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+        .start-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        .start-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .mode-btn { display: flex; align-items: center; gap: 16px; width: 100%; padding: 16px; background: #fff; border: 1.5px solid var(--border-color); border-radius: 16px; text-align: left; margin-bottom: 12px; transition: all 0.2s ease; }
+        .mode-btn:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+        .mode-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .mode-icon.quiz { background: #dbeafe; color: #2563eb; }
+        .mode-icon.test { background: #d1fae5; color: #059669; }
+        .mode-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .mode-info-txt { font-size: 12px; color: var(--text-muted); }
+        .mode-arrow { margin-left: auto; color: var(--text-muted); font-size: 14px; }
+        .quiz-app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+        .quiz-header { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border-color); padding: 12px 18px; }
+        .quiz-header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .hdr-brand { font-weight: 700; font-size: 15px; }
+        .hdr-timer { padding: 6px 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 20px; font-family: monospace; font-weight: 700; color: var(--primary); }
+        .hdr-btn { width: 38px; height: 38px; border-radius: 10px; background: #fff; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        .quiz-main { flex: 1; overflow-y: auto; max-width: 900px; width: 100%; margin: 0 auto; padding: 24px 16px; }
+        .q-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); }
+        .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+        .q-num-badge { padding: 5px 12px; background: var(--primary-light); color: var(--primary); border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .q-text { font-size: 16px; font-weight: 600; line-height: 1.6; margin-bottom: 22px; white-space: pre-line; }
+        .opts { display: flex; flex-direction: column; gap: 11px; }
+        .opt { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #fff; border: 1.5px solid var(--border-color); border-radius: 14px; cursor: pointer; transition: all 0.15s ease; }
+        .opt:hover:not(.locked) { border-color: var(--primary); background: #f8fafc; }
+        .opt.selected { border-color: var(--primary); background: var(--primary-light); }
+        .opt.correct { border-color: var(--green); background: var(--green-light); }
+        .opt.wrong { border-color: var(--red); background: var(--red-light); }
+        .opt.locked { cursor: default; }
+        .opt-letter { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--text-muted); flex-shrink: 0; }
+        .opt.selected .opt-letter { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .opt.correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
+        .opt.wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
+        .opt-text { flex: 1; font-weight: 600; }
+        .opt-tag { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+        .opt.correct .opt-tag { background: var(--green); color: #fff; }
+        .opt.wrong .opt-tag { background: var(--red); color: #fff; }
+        .sol-box { margin-top: 20px; padding: 16px; background: #f8fafc; border-left: 4px solid var(--primary); border-radius: 12px; }
+        .sol-head { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; }
+        .quiz-nav { flex-shrink: 0; background: #fff; border-top: 1px solid var(--border-color); padding: 12px 18px; }
+        .quiz-nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; }
+        .nav-btn.prev { background: #fff; border: 1px solid var(--border-color); }
+        .nav-btn.prev:disabled { opacity: 0.4; cursor: not-allowed; }
+        .nav-btn.submit { background: var(--green-light); color: #065f46; border: 1px solid #a7f3d0; }
+        .nav-btn.next { background: var(--primary); color: #fff; }
+        .palette-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; }
+        .palette-overlay.open { display: block; }
+        .palette-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(340px, 85vw); background: #fff; z-index: 160; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.25s; }
+        .palette-drawer.open { transform: translateX(0); }
+        .pal-head { padding: 18px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
+        .pal-grid { flex: 1; overflow-y: auto; padding: 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-content: start; }
+        .pal-btn { aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border-color); background: #f8fafc; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .pal-btn.answered { background: var(--green); color: #fff; border-color: var(--green); }
+        .pal-btn.current { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 170; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal-box { width: 100%; max-width: 420px; background: #fff; border-radius: 20px; padding: 28px; text-align: center; }
+        .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 22px; }
+        .modal-stat { background: #f8fafc; border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); }
+        .modal-stat-num { font-size: 24px; font-weight: 800; }
+        .modal-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .modal-btn.confirm { background: var(--primary); color: #fff; }
+        .modal-btn.cancel { background: #f1f5f9; }
+        .results-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 180; display: none; overflow-y: auto; padding: 30px 16px 60px; }
+        .results-screen.open { display: block; }
+        .results-box { max-width: 600px; margin: 0 auto; text-align: center; }
+        .res-score-card { background: #0f172a; color: #fff; border-radius: 20px; padding: 28px; margin: 20px 0; }
+        .res-score-val { font-size: 54px; font-weight: 800; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .res-item { background: #fff; border-radius: 14px; padding: 16px; border: 1px solid var(--border-color); }
+        .res-item-val { font-size: 22px; font-weight: 700; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #0f172a; color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 300; opacity: 0; transition: all 0.25s; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="startScreen">
+        <div class="start-card">
+            <div class="brand-icon"><i class="fas fa-spell-check"></i></div>
+            <h1 class="start-title">Pronoun — Lecture 2</h1>
+            <p class="start-desc">SSC English Practice & Speed Building Test (24 Questions)</p>
+            <button class="mode-btn" onclick="startApp('quiz')">
+                <div class="mode-icon quiz"><i class="fas fa-bolt"></i></div>
+                <div><div class="mode-name">Practice Mode</div><div class="mode-info-txt">Har question ke sath instant solution aur explanation.</div></div>
+            </button>
+            <button class="mode-btn" onclick="startApp('test')">
+                <div class="mode-icon test"><i class="fas fa-clock"></i></div>
+                <div><div class="mode-name">Exam Mode</div><div class="mode-info-txt">Bina kisi help ke test dein aur last me score dekhein.</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="quiz-app hidden" id="quizApp">
+        <header class="quiz-header">
+            <div class="quiz-header-inner">
+                <button class="hdr-btn" onclick="openPalette()"><i class="fas fa-th-large"></i></button>
+                <div class="hdr-brand">Pronoun Lecture 2</div>
+                <div class="hdr-timer"><i class="fas fa-stopwatch"></i> <span id="timerText">00:00</span></div>
+            </div>
+        </header>
+
+        <main class="quiz-main" id="quizMain"></main>
+
+        <nav class="quiz-nav" id="quizNav">
+            <div class="quiz-nav-inner">
+                <button class="nav-btn prev" id="prevBtn" onclick="prevQuestion()"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="nav-btn submit" onclick="openSubmitModal()"><i class="fas fa-paper-plane"></i> Submit</button>
+                <button class="nav-btn next" id="nextBtn" onclick="nextQuestion()"><span id="nextLabel">Next</span> <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </nav>
+    </div>
+
+    <div class="palette-overlay" id="paletteOverlay" onclick="closePalette()"></div>
+    <aside class="palette-drawer" id="paletteDrawer">
+        <div class="pal-head"><span>Questions</span><button onclick="closePalette()"><i class="fas fa-times"></i></button></div>
+        <div class="pal-grid" id="paletteGrid"></div>
+    </aside>
+
+    <div class="modal-overlay" id="submitModal">
+        <div class="modal-box">
+            <h3>Submit Test?</h3>
+            <div class="modal-stats-grid">
+                <div class="modal-stat"><div class="modal-stat-num" id="modalAttempted" style="color:var(--green)">0</div><div>Attempted</div></div>
+                <div class="modal-stat"><div class="modal-stat-num" id="modalUnattempted" style="color:var(--text-muted)">0</div><div>Unattempted</div></div>
+            </div>
+            <button class="modal-btn confirm" onclick="confirmSubmit()">Yes, Finish</button>
+            <button class="modal-btn cancel" onclick="closeSubmitModal()">Resume</button>
+        </div>
+    </div>
+
+    <div class="results-screen" id="resultsScreen"><div class="results-box" id="resultsInner"></div></div>
+    <div class="toast" id="toast"><span id="toastText"></span></div>
+
+    <script>
+        const QUESTIONS = [
+            {
+                q: "Choose the most suitable option to replace the highlighted part of the sentence: (SSC CGL 2025 Tier-01)\nWe enjoyed very much at the party.",
+                opts: ["have enjoyed very much", "enjoyed ourselves very much", "enjoyed at the party", "were enjoyed"],
+                a: 1,
+                s: "'enjoy' is a transitive verb that requires an object. When no direct object (movie, food, etc.) is given, use a reflexive pronoun ('enjoyed ourselves')."
+            },
+            {
+                q: "Identify the correct type of pronoun in the following sentence. (SSC SP Matriculation Level 2025)\nI enjoyed myself during the holidays.\nHere, Myself is a ________ pronoun.",
+                opts: ["reflexive", "possessive", "distributive", "demonstrative"],
+                a: 0,
+                s: "Reflexive pronoun is used when subject and object refer to the same person ('I' and 'myself')."
+            },
+            {
+                q: "Choose the most suitable option to replace the highlighted part of the sentence: (SSC CGL 2025 Tier-01)\nThey enjoyed during the holidays.",
+                opts: ["enjoyment in the holidays", "enjoyed in the holidays", "themselves during the holidays", "themselves in holidays"],
+                a: 2,
+                s: "The verb 'enjoy' takes 'themselves' as reflexive object for the subject 'They'."
+            },
+            {
+                q: "'I do my work myself.'\nIdentify the type of the pronoun underlined in the above sentence.",
+                opts: ["Relative", "Reflexive", "Emphatic", "Personal"],
+                a: 2,
+                s: "When a self-pronoun is used to add emphasis to the doer, it is called an Emphatic Pronoun."
+            },
+            {
+                q: "Identify which type of pronoun the underlined word is:\nFollow her and she will show you which room is yours.",
+                opts: ["Reflexive", "Relative", "Distributive", "Possessive"],
+                a: 3,
+                s: "'yours' is an independent Possessive Pronoun showing ownership without requiring a following noun."
+            },
+            {
+                q: "The butterfly spent the rest of __________ life unable to fly.",
+                opts: ["it", "its", "their", "one's"],
+                a: 1,
+                s: "'its' is the possessive determiner for a singular, non-human noun ('butterfly')."
+            },
+            {
+                q: "My college is farther than_______.",
+                opts: ["her", "her's", "hers", "she"],
+                a: 2,
+                s: "'hers' is the possessive pronoun replacing the repeated phrase 'her college'."
+            },
+            {
+                q: "We finished the work, all by__________.",
+                opts: ["themselves", "oneself", "ourselves", "herself"],
+                a: 2,
+                s: "The subject is 'We' (first-person plural), so the reflexive pronoun must be 'ourselves'."
+            },
+            {
+                q: "The small cafe at the end of the road is her.\n[CGL Tier II-16/11/2020]",
+                opts: ["of the road", "The small cafe", "at the end", "is her"],
+                a: 3,
+                s: "'her' is an objective pronoun/adjective. After linking verb 'is', the possessive pronoun 'hers' is required."
+            },
+            {
+                q: "Its always a/ beautiful day / in my neighbourhood.\n[MTS 20/07/2022 S3]",
+                opts: ["beautiful day", "in my neighbourhood", "No error", "Its always a"],
+                a: 3,
+                s: "'Its' is possessive. The sentence requires the contraction of 'It is', which is written as 'It's'."
+            },
+            {
+                q: "She has been a member of this club since it's formation.\n[CGL Tier II - 16/11/2020]",
+                opts: ["this club", "since it's formation", "She has been", "a member of"],
+                a: 1,
+                s: "'it's' means 'it is'. For possession of 'club', use the possessive adjective 'its' without an apostrophe."
+            },
+            {
+                q: "Those who follow a healthy routine is likely enjoying good health.\n[CGL, 04/3/2020 S2]",
+                opts: ["good health", "a healthy routine", "is likely enjoying", "Those who follow"],
+                a: 2,
+                s: "'Those' is plural, so verb must be 'are', followed by 'to enjoy' ('are likely to enjoy')."
+            },
+            {
+                q: "You care for him / even more than for myself, / he cried bitterly.\n(SSC CHSL 13/03/2023 S3)",
+                opts: ["You care for him", "he cried bitterly", "No error", "even more than for myself"],
+                a: 3,
+                s: "Reflexive pronoun 'myself' is incorrect here; in comparison between 'him' and 'me', objective pronoun 'me' is required."
+            },
+            {
+                q: "Her handwriting is definitely more beautiful than your.\n(CGL Mains 03/02/2022)",
+                opts: ["more beautiful", "Her handwriting", "than your", "is definitely"],
+                a: 2,
+                s: "'your' needs a noun after it. Use possessive pronoun 'yours' ('more beautiful than yours')."
+            },
+            {
+                q: "After / a long and fun-filled day, / the children / slept themselves peacefully.\n[SSC CHSL 24/05/2022 S3]",
+                opts: ["a long and fun-filled day", "slept themselves peacefully", "the children", "After"],
+                a: 1,
+                s: "'sleep' is an intransitive verb and does not take a reflexive pronoun. Use 'slept peacefully'."
+            },
+            {
+                q: "I am not sure / if the red car / in the parking slot / is your.\n(SSC CHSL 27/05/2022 S1)",
+                opts: ["in the parking slot", "I am not sure", "if the red car", "is your"],
+                a: 3,
+                s: "Without a following noun, use independent possessive pronoun 'yours' instead of 'your'."
+            },
+            {
+                q: "I find that / I get myself tired/ very easily / these days.\n(CGL tier -I 13/04/2021 S3)",
+                opts: ["these days", "I find that", "I get myself tired", "very easily"],
+                a: 2,
+                s: "'get' does not require a reflexive pronoun here. The correct idiom is simply 'I get tired'."
+            },
+            {
+                q: "You should tell these children to complete their projects himself.\n(SSC CGL Tier-02 08/08/22)",
+                opts: ["You should tell", "No error", "These children to complete", "Their projects himself"],
+                a: 3,
+                s: "'these children' is plural, so use plural reflexive pronoun 'themselves' instead of 'himself'."
+            },
+            {
+                q: "I will never/judge you for/yours impromptu performance.\n(SSC CHSL Tier-01 13/03/23)",
+                opts: ["I will never", "Yours impromptu performance", "Judge you for", "No error"],
+                a: 1,
+                s: "Before the noun phrase 'impromptu performance', use possessive adjective 'your', not 'yours'."
+            },
+            {
+                q: "My sister and myself are pleased to accept your invitation to dinner.\n(SSC Stenographer Grade C&D-05/02/2019)",
+                opts: ["My sister and myself", "are pleased", "to accept", "your invitation to dinner"],
+                a: 0,
+                s: "'myself' cannot be used as subject. The correct subject form is 'My sister and I'."
+            },
+            {
+                q: "Often we our selves are responsible for our ill health.\n(CGL Mains 03/02/2022)",
+                opts: ["ourself", "themselves", "yourself", "No improvement required"],
+                a: 3,
+                s: "'we ourselves' is correct emphatic/reflexive usage for plural first person 'we'."
+            },
+            {
+                q: "I had to hold on to the wall to steady itself or I could have fallen.\n(SSC CPO Tier-01 24/11/20)",
+                opts: ["To the wall", "To steady itself", "Could have fallen", "I had to hold on"],
+                a: 1,
+                s: "Subject is 'I', so steadying refers to the speaker: 'to steady myself'."
+            },
+            {
+                q: "Both men and women / consider a variety of concerns/ when selecting there outfits.\n(SSC MTS Tier-01 11/05/23)",
+                opts: ["Consider a variety of concerns", "Both men and women", "No error", "When selecting there outfits."],
+                a: 3,
+                s: "Replace 'there' (place) with the possessive determiner 'their' ('their outfits')."
+            },
+            {
+                q: "She itself are responsible for this situation of hers.\n(CGL Tier II 15/11/2020)",
+                opts: ["herself are", "oneself is", "herself is", "No substitution required"],
+                a: 2,
+                s: "'She' is singular feminine, requiring 'herself' and singular verb 'is' ('She herself is responsible')."
+            }
+        ];
+
+        const state = { current: 0, answers: new Array(QUESTIONS.length).fill(null), locked: new Array(QUESTIONS.length).fill(false), mode: 'test', startTime: null, timerInterval: null, elapsed: 0 };
+        function $(id) { return document.getElementById(id); }
+        function toast(msg) { const t = $('toast');$('toastText').textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        function formatTime(s) { const m = Math.floor(s / 60); return String(m).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+
+        function startApp(mode) {
+            state.mode = mode; $('startScreen').classList.add('hidden');$('quizApp').classList.remove('hidden');
+            state.startTime = Date.now();
+            state.timerInterval = setInterval(() => {
+                state.elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+                $('timerText').textContent = formatTime(state.elapsed);
+            }, 1000);
+            renderQuestion(); buildPalette();
+        }
+
+        function renderQuestion() {
+            const i = state.current, q = QUESTIONS[i], isQuiz = state.mode === 'quiz', locked = state.locked[i], userAns = state.answers[i];
+            let optsHtml = '';
+            q.opts.forEach((opt, idx) => {
+                let cls = '', tag = '';
+                if (isQuiz && locked) {
+                    if (idx === q.a) { cls = 'correct'; tag = '<span class="opt-tag">Correct</span>'; }
+                    if (userAns === idx && idx !== q.a) { cls = 'wrong'; tag = '<span class="opt-tag">Your Ans</span>'; }
+                } else if (userAns === idx) cls = 'selected';
+                optsHtml += `<div class="opt ${cls} ${locked ? 'locked' : ''}" onclick="selectOption(${idx})"><div class="opt-letter">${String.fromCharCode(65 + idx)}</div><div class="opt-text">${opt}</div>${tag}</div>`;
+            });
+            let solHtml = (isQuiz && locked) ? `<div class="sol-box"><div class="sol-head"><i class="fas fa-lightbulb"></i> Rule &amp; Explanation</div><div>${q.s}</div></div>` : '';
+            $('quizMain').innerHTML = `
+                <div class="q-card">
+                    <div class="q-top"><div class="q-num-badge">Question ${i + 1} of ${QUESTIONS.length}</div></div>
+                    <div class="q-text">${q.q}</div>
+                    <div class="opts">${optsHtml}</div>
+                    ${solHtml}
+                </div>
+            `;
+            $('prevBtn').disabled = i === 0;
+            $('nextLabel').textContent = i === QUESTIONS.length - 1 ? 'Finish' : 'Next';
+            updatePaletteGrid();
+        }
+
+        function selectOption(idx) {
+            if (state.mode === 'quiz' && state.locked[state.current]) return;
+            state.answers[state.current] = idx;
+            if (state.mode === 'quiz') {
+                state.locked[state.current] = true;
+                if (idx === QUESTIONS[state.current].a) toast('Correct! 🎉'); else toast('Incorrect');
+            }
+            renderQuestion();
+        }
+
+        function prevQuestion() { if (state.current > 0) { state.current--; renderQuestion(); } }
+        function nextQuestion() {
+            if (state.current < QUESTIONS.length - 1) { state.current++; renderQuestion(); }
+            else openSubmitModal();
+        }
+
+        function buildPalette() {
+            const grid = $('paletteGrid'); grid.innerHTML = '';
+            QUESTIONS.forEach((_, i) => {
+                const btn = document.createElement('button'); btn.className = 'pal-btn'; btn.id = 'pal-' + i; btn.textContent = i + 1;
+                btn.onclick = () => { state.current = i; closePalette(); renderQuestion(); };
+                grid.appendChild(btn);
+            });
+            updatePaletteGrid();
+        }
+
+        function updatePaletteGrid() {
+            QUESTIONS.forEach((_, i) => {
+                const btn = $('pal-' + i); if (!btn) return;
+                btn.className = 'pal-btn';
+                if (i === state.current) btn.classList.add('current');
+                if (state.answers[i] !== null) btn.classList.add('answered');
+            });
+        }
+
+        function openPalette() { $('paletteDrawer').classList.add('open');$('paletteOverlay').classList.add('open'); }
+        function closePalette() { $('paletteDrawer').classList.remove('open');$('paletteOverlay').classList.remove('open'); }
+        function openSubmitModal() {
+            const ans = state.answers.filter(a => a !== null).length;
+            $('modalAttempted').textContent = ans; $('modalUnattempted').textContent = QUESTIONS.length - ans;
+            $('submitModal').classList.add('open');
+        }
+        function closeSubmitModal() { $('submitModal').classList.remove('open'); }
+
+        function confirmSubmit() {
+            closeSubmitModal(); if (state.timerInterval) clearInterval(state.timerInterval);
+            let correct = 0, wrong = 0;
+            state.answers.forEach((ans, i) => { if (ans !== null) { if (ans === QUESTIONS[i].a) correct++; else wrong++; } });
+            $('resultsInner').innerHTML = `
+                <h2>Test Completed!</h2><p style="color:var(--text-muted);margin:8px 0;">Total Time: ${formatTime(state.elapsed)}</p>
+                <div class="res-score-card"><div class="res-score-val">${correct} / ${QUESTIONS.length}</div><div>Score</div></div>
+                <div class="res-grid">
+                    <div class="res-item"><div class="res-item-val" style="color:var(--green)">${correct}</div><div>Correct</div></div>
+                    <div class="res-item"><div class="res-item-val" style="color:var(--red)">${wrong}</div><div>Wrong</div></div>
+                </div>
+                <button class="modal-btn confirm" onclick="location.reload()">Re-attempt</button>
+            `;
+            $('resultsScreen').classList.add('open');
+        }
+    </script>
+</body>
+</html>
